@@ -1,0 +1,87 @@
+{
+  "name": "search-in-folder-vscode",
+  "displayName": "Search in Folder",
+  "description": "Search selected text in current file's directory or workspace",
+  "version": "0.0.2",
+  "publisher": "Damon Z",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zhouyj1204/search-in-folder-vscode"
+  },
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": [
+    "onCommand:search-in-folder.searchInCurrentFolder",
+    "onCommand:search-in-folder.searchInWorkspace"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "search-in-folder.searchInCurrentFolder",
+        "title": "Search in Current Folder"
+      },
+      {
+        "command": "search-in-folder.searchInWorkspace",
+        "title": "Search in Workspace (No Path Restriction)"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "search-in-folder.searchInCurrentFolder",
+        "key": "alt+f",
+        "mac": "alt+f",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "search-in-folder.searchInWorkspace",
+        "key": "ctrl+alt+f",
+        "mac": "ctrl+alt+f",
+        "when": "editorTextFocus"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "search-in-folder.searchInCurrentFolder",
+          "group": "search"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "search-in-folder.searchInCurrentFolder",
+          "group": "search",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "search-in-folder.searchInWorkspace",
+          "group": "search",
+          "when": "editorHasSelection"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "package": "vsce package",
+    "install-local": "node -e \"const fs=require('fs'),{execSync}=require('child_process');const f=fs.readdirSync('.').find(f=>f.endsWith('.vsix'));if(!f){console.error('No .vsix found');process.exit(1);}execSync('code --install-extension '+f+' --force',{stdio:'inherit'});\""
+  },
+  "overrides": {
+    "undici": "5.28.4"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.60.0",
+    "@types/node": "16.x",
+    "@typescript-eslint/eslint-plugin": "^5.59.1",
+    "@typescript-eslint/parser": "^5.59.1",
+    "eslint": "^8.39.0",
+    "typescript": "^5.0.4",
+    "@vscode/vsce": "2.15.0"
+  }
+}
