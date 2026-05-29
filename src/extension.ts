@@ -1,3 +1,4 @@
+import * as child_process from 'child_process';
 import * as path from 'path';
 import * as vscode from 'vscode';
 
@@ -73,7 +74,77 @@ export function activate(context: vscode.ExtensionContext) {
     }
   );
 
-  context.subscriptions.push(searchInFolderDisposable, searchInWorkspaceDisposable);
+  // ========== 功能3：在当前文件所在 git 项目根目录下搜索 ==========
+  const searchInGitRootDisposable = vscode.commands.registerCommand(
+    'search-in-folder.searchInGitRoot',
+    async () => {
+      const editor = vscode.window.activeTextEditor;
+
+      if (!editor) {
+        await vscode.commands.executeCommand('workbench.action.findInFiles');
+        return;
+      }
+
+      const selection = editor.selection;
+      const selectedText = editor.document.getText(selection);
+
+      if (!selectedText) {
+        await vscode.commands.executeCommand('workbench.action.findInFiles');
+        return;
+      }
+
+      const currentFilePath = editor.document.uri.fsPath;
+      const currentDir = path.dirname(currentFilePath);
+
+      const gitRoot = await getGitRoot(currentDir);
+
+      if (!gitRoot) {
+        vscode.window.showWarningMessage('Not inside a git repository.');
+        return;
+      }
+
+      const workspaceFolder = vscode.workspace.getWorkspaceFolder(editor.document.uri);
+      const workspaceRoot = workspaceFolder?.uri.fsPath;
+
+      // Build include pattern relative to workspace root (vscode search requires workspace-relative path)
+      let includePattern: string;
+      let locationDescription: string;
+
+      if (workspaceRoot && gitRoot.startsWith(workspaceRoot)) {
+        const relativeGitRoot = path.relative(workspaceRoot, gitRoot).replace(/\\/g, '/');
+        includePattern = relativeGitRoot ? `${relativeGitRoot}/**` : '**';
+        locationDescription = relativeGitRoot || 'workspace root (git root)';
+      } else {
+        // git root is outside or equal to workspace root; fall back to full path pattern
+        includePattern = gitRoot.replace(/\\/g, '/') + '/**';
+        locationDescription = gitRoot;
+      }
+
+      await executeSearch(selectedText, includePattern, locationDescription);
+    }
+  );
+
+  context.subscriptions.push(searchInFolderDisposable, searchInWorkspaceDisposable, searchInGitRootDisposable);
+}
+
+/**
+ * Resolve the git root directory for a given directory path.
+ * Returns null if the directory is not inside a git repository.
+ */
+function getGitRoot(dir: string): Promise<string | null> {
+  return new Promise((resolve) => {
+    child_process.exec(
+      'git rev-parse --show-toplevel',
+      { cwd: dir },
+      (err, stdout) => {
+        if (err || !stdout.trim()) {
+          resolve(null);
+        } else {
+          resolve(stdout.trim());
+        }
+      }
+    );
+  });
 }
 
 /**
