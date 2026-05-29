@@ -14,7 +14,8 @@
   "categories": ["Other"],
   "activationEvents": [
     "onCommand:search-in-folder.searchInCurrentFolder",
-    "onCommand:search-in-folder.searchInWorkspace"
+    "onCommand:search-in-folder.searchInWorkspace",
+    "onCommand:search-in-folder.searchInGitRoot"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -26,6 +27,10 @@
       {
         "command": "search-in-folder.searchInWorkspace",
         "title": "Search in Workspace (No Path Restriction)"
+      },
+      {
+        "command": "search-in-folder.searchInGitRoot",
+        "title": "Search in Git Project Root"
       }
     ],
     "keybindings": [
@@ -39,6 +44,12 @@
         "command": "search-in-folder.searchInWorkspace",
         "key": "ctrl+alt+f",
         "mac": "ctrl+alt+f",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "search-in-folder.searchInGitRoot",
+        "key": "ctrl+shift+alt+f",
+        "mac": "ctrl+shift+alt+f",
         "when": "editorTextFocus"
       }
     ],
@@ -57,6 +68,11 @@
         },
         {
           "command": "search-in-folder.searchInWorkspace",
+          "group": "search",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "search-in-folder.searchInGitRoot",
           "group": "search",
           "when": "editorHasSelection"
         }
@@ -85,3 +101,4 @@
     "@vscode/vsce": "2.15.0"
   }
 }
+
