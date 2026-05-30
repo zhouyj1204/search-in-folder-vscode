@@ -2,8 +2,8 @@
   "name": "search-in-folder-vscode",
   "displayName": "Search in Folder",
   "description": "Search selected text in current file's directory or workspace",
-  "version": "0.0.2",
-  "publisher": "Damon Z",
+  "version": "0.3.0",
+  "publisher": "demigula",
   "repository": {
     "type": "git",
     "url": "https://github.com/zhouyj1204/search-in-folder-vscode"

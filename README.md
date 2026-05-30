@@ -1,54 +1,46 @@
-# Search in Current Folder
+# Search in Folder
 
-A simple VS Code extension for searching the selected text in the directory of the current file.
+A VS Code extension for quickly searching selected text with smart scope control.
 
 ## Features
 
-| Shortcut | Command | Description |
-|--------|------|------|
-| `Alt F` | Search in Current Folder | Search the selected text in the directory of the current file (including subdirectories) |
-| `Ctrl Alt F` | Search in Workspace | Search the selected text across the entire workspace (removing path restrictions) |
+### 1. Search in Current Folder
+
+Search the selected text **only within the directory of the current file** (including subdirectories).
+
+| Platform | Shortcut |
+|----------|----------|
+| Windows / Linux | `Alt F` |
+| macOS | `Alt F` |
+
+### 2. Search in Workspace
+
+Search the selected text **across the entire workspace** with no path restrictions.
+
+| Platform | Shortcut |
+|----------|----------|
+| Windows / Linux | `Ctrl Alt F` |
+| macOS | `Ctrl Alt F` |
+
+### 3. Search in Git Project Root
+
+Search the selected text **within the current Git repository root**.
+
+| Platform | Shortcut |
+|----------|----------|
+| Windows / Linux | `Ctrl Shift Alt F` |
+| macOS | `Ctrl Shift Alt F` |
 
 ## Usage
 
-1. Select the text you want to search in the editor
-2. Press `Alt F` → Automatically search within the directory of the current file
-3. Press `Ctrl Alt F` → Search across the entire workspace (no path limit)
+1. Select text in the editor
+2. Press any shortcut above, or right-click and choose from the context menu
+3. Search results appear in the Search panel, automatically collapsed for readability
 
-You can also trigger it via the right-click menu → "Search in Current Folder".
+## Context Menu
 
-## Development
-
-```bash
-# Install dependencies
-npm install
-
-# Compile (TypeScript → JS)
-npm run compile
-
-# Watch mode (auto recompile)
-npm run watch
-
-# Debug: Press F5 to open the Extension Development Host window
-```
-
-## Packaging & Installation
-
-```bash
-# Package as .vsix
-npm run package
-
-# Install to local VS Code
-npm run install-local
-# Or manually: code --install-extension search-in-folder-*.vsix --force
-```
-
-## Enhancement Ideas
-
-- [ ] Support triggering from folder explorer right-click (search specified directory)
-- [ ] Case-sensitive / regex mode toggle (shortcut key)
-- [ ] Search history
-- [ ] Support merging multiple selected texts for OR search
+- **Editor**: Right-click with text selected to see all three search options
+- **Explorer**: Right-click a file/folder to search in that location
 
 ## License
 
